@@ -2,16 +2,17 @@ let result = document.getElementById("results");
 let filter = document.getElementById("filter");
 let listItems = [];
 
+filter.addEventListener("input", (e) => filterData(e.target.value));
+
 getData();
 
 async function getData() {
   let res = await fetch("https://randomuser.me/api?results=50");
-  let results = await res.json();
-  console.log(results);
+  const { results } = await res.json();
 
   result.innerHTML = "";
 
-  results.foreach((user) => {
+  results.forEach((user) => {
     let li = document.createElement("li");
 
     listItems.push(li);
@@ -26,5 +27,15 @@ async function getData() {
         `;
 
     result.appendChild(li);
+  });
+}
+
+function filterData(searchTerm) {
+  listItems.forEach((item) => {
+    if (item.innerText.toLowerCase().includes(searchTerm.toLowerCase())) {
+      item.classList.remove("hide");
+    } else {
+      item.classList.add("hide");
+    }
   });
 }
